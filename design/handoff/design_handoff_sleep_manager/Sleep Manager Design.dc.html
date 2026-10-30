@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/replicant-design-system-8e030a28-4bab-40db-8407-2c3ee0c4ffba/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/replicant-design-system-8e030a28-4bab-40db-8407-2c3ee0c4ffba/tokens/colors.css">
+<link rel="stylesheet" href="_ds/replicant-design-system-8e030a28-4bab-40db-8407-2c3ee0c4ffba/tokens/typography.css">
+<link rel="stylesheet" href="_ds/replicant-design-system-8e030a28-4bab-40db-8407-2c3ee0c4ffba/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/replicant-design-system-8e030a28-4bab-40db-8407-2c3ee0c4ffba/tokens/base.css">
+<link rel="stylesheet" href="_ds/replicant-design-system-8e030a28-4bab-40db-8407-2c3ee0c4ffba/styles.css">
+<script src="_ds/replicant-design-system-8e030a28-4bab-40db-8407-2c3ee0c4ffba/_ds_bundle.js"></script>
+<style>body{margin:0;background:#F9F9F1}a{color:#0A35F5}a:hover{color:#0828C4}</style>
+</helmet>
+<section id="turn-1" data-screen-label="Turn 1" style="background:#F9F9F1;padding:72px;font-family:'Lay Grotesk',Inter,sans-serif;color:#323230;display:flex;flex-direction:column;gap:56px;min-width:1400px">
+  <header style="display:flex;flex-direction:column;gap:12px;max-width:820px">
+    <div style="font-family:'Geist Mono',monospace;font-size:15px;letter-spacing:0.05em;text-transform:uppercase;color:#0A35F5">Sleep Manager · Turn 1</div>
+    <h1 style="margin:0;font-family:'Tiempos Headline',serif;font-weight:300;font-size:52px;line-height:1.1;letter-spacing:0.01em">Three icon concepts, one menu</h1>
+    <p style="margin:0;font-size:18px;line-height:1.45;text-wrap:pretty">Pick a concept (<a href="#1a">1a</a>, <a href="#1b">1b</a> or <a href="#1c">1c</a>). The menu mockups below use the concept set in Tweaks, currently <strong>{{conceptName}}</strong>. Lid closed red: <strong>{{red}}</strong>, the same value on light and dark bars.</p>
+  </header>
+
+  <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+    <sc-for list="{{concepts}}" as="c" hint-placeholder-count="3">
+      <div id="{{c.id}}" style="width:440px;background:#FFFFFF;border:1px solid #C2C2C2;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:24px;box-sizing:border-box">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="font-family:'Geist Mono',monospace;font-size:14px;text-transform:uppercase;background:#323230;color:#F9F9F1;border-radius:100px;padding:4px 12px">{{c.id}}</span>
+          <span style="font-family:'Tiempos Headline',serif;font-size:27px;letter-spacing:0.01em">{{c.name}}</span>
+        </div>
+        <p style="margin:0;font-size:16px;line-height:1.45;text-wrap:pretty">{{c.note}}</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <sc-for list="{{c.big}}" as="b" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+              <div style="width:100%;aspect-ratio:1;background:#F9F9F1;border:1px solid #C2C2C2;border-radius:12px;display:flex;align-items:center;justify-content:center">{{b.el}}</div>
+              <span style="font-family:'Geist Mono',monospace;font-size:13px;text-transform:uppercase;letter-spacing:0.05em">{{b.label}}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{c.bars}}" as="bar" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-columns:120px repeat(3,1fr);gap:8px;align-items:center">
+              <span style="font-family:'Geist Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:0.04em">{{bar.label}}</span>
+              <sc-for list="{{bar.cells}}" as="cell" hint-placeholder-count="3">
+                <div style="height:22px;border-radius:4px;background:{{bar.bg}};display:flex;align-items:center;justify-content:center">{{cell}}</div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:40px">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'Geist Mono',monospace;font-size:15px;letter-spacing:0.05em;text-transform:uppercase;color:#0A35F5">Menu mockups</div>
+      <h2 style="margin:0;font-family:'Tiempos Headline',serif;font-weight:300;font-size:44px;letter-spacing:0.01em">Every state, light and dark</h2>
+    </div>
+    <sc-for list="{{groups}}" as="g" hint-placeholder-count="7">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <span style="font-size:23px;font-weight:600">{{g.title}}</span>
+          <span style="font-size:16px;line-height:1.45;max-width:760px">{{g.note}}</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:32px">
+          <sc-for list="{{g.mocks}}" as="m" hint-placeholder-count="2">
+            <div data-mock="{{m.key}}" style="position:relative;width:{{m.w}}px;height:{{m.h}}px;border-radius:12px;overflow:hidden;background:{{m.t.wall}};font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;font-size:13px;-webkit-font-smoothing:antialiased">
+              <div style="position:absolute;left:0;right:0;top:0;height:22px;background:{{m.t.bar}};display:flex;align-items:center;justify-content:flex-end;gap:14px;padding:0 12px;color:{{m.t.fg}}">
+                <div style="width:22px;height:11px;border:1px solid {{m.t.fg}};border-radius:3px;padding:1px;box-sizing:border-box;opacity:0.85"><div style="width:70%;height:100%;background:{{m.t.fg}};border-radius:1px"></div></div>
+                <span style="font-size:13px;font-weight:500">Fri 30 Oct  2:14 PM</span>
+              </div>
+              <div style="position:absolute;left:36px;top:2px;width:30px;height:18px;border-radius:5px;background:{{m.t.iconHi}};display:flex;align-items:center;justify-content:center">{{m.icon}}</div>
+              <div style="position:absolute;left:30px;top:27px;width:300px;padding:5px 0;box-sizing:border-box;background:{{m.t.menuBg}};border:0.5px solid {{m.t.border}};border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,0.28);backdrop-filter:blur(30px);display:flex;flex-direction:column">
+                <sc-for list="{{m.rows}}" as="r" hint-placeholder-count="9">
+                  <sc-if value="{{r.isSep}}" hint-placeholder-val="{{false}}">
+                    <div style="height:1px;margin:5px 14px;background:{{m.t.sep}}"></div>
+                  </sc-if>
+                  <sc-if value="{{r.isRow}}" hint-placeholder-val="{{true}}">
+                    <div style="min-height:22px;margin:0 5px;padding:{{r.pad}};border-radius:6px;background:{{r.bg}};display:flex;align-items:center;box-sizing:border-box">
+                      <div style="width:20px;flex:none;display:flex;justify-content:center">{{r.check}}</div>
+                      <div style="flex:1;display:flex;flex-direction:column;gap:1px;min-width:0">
+                        <span style="color:{{r.color}};white-space:nowrap">{{r.label}}</span>
+                        <sc-if value="{{r.sub}}" hint-placeholder-val="{{false}}">
+                          <span style="font-size:11px;color:{{r.subColor}}">{{r.sub}}</span>
+                        </sc-if>
+                      </div>
+                      <span style="color:{{r.subColor}};padding-right:10px">{{r.shortcut}}</span>
+                      <div style="padding-right:8px;display:flex">{{r.chev}}</div>
+                    </div>
+                  </sc-if>
+                </sc-for>
+              </div>
+              <sc-if value="{{m.hasSub}}" hint-placeholder-val="{{false}}">
+                <div style="position:absolute;left:324px;top:{{m.subTop}}px;width:290px;padding:5px 0;box-sizing:border-box;background:{{m.t.menuBg}};border:0.5px solid {{m.t.border}};border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,0.28);display:flex;flex-direction:column">
+                  <sc-for list="{{m.subRows}}" as="r" hint-placeholder-count="3">
+                    <div style="min-height:22px;margin:0 5px;padding:{{r.pad}};border-radius:6px;display:flex;align-items:center;gap:6px;box-sizing:border-box">
+                      <div style="width:20px;flex:none;display:flex;justify-content:center;color:{{r.color}}">{{r.sym}}</div>
+                      <div style="flex:1;display:flex;flex-direction:column;gap:1px;min-width:0">
+                        <span style="color:{{r.color}};white-space:nowrap">{{r.label}}</span>
+                        <sc-if value="{{r.sub}}" hint-placeholder-val="{{false}}">
+                          <span style="font-size:11px;color:{{r.subColor}}">{{r.sub}}</span>
+                        </sc-if>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <span style="position:absolute;right:12px;bottom:10px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:{{m.t.fg}};opacity:0.6">{{m.themeLabel}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:16px;max-width:760px">
+    <div style="font-family:'Geist Mono',monospace;font-size:15px;letter-spacing:0.05em;text-transform:uppercase;color:#0A35F5">Final wording</div>
+    <div style="background:#FFFFFF;border:1px solid #C2C2C2;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:20px">
+      <sc-for list="{{wording}}" as="w" hint-placeholder-count="5">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-family:'Geist Mono',monospace;font-size:13px;letter-spacing:0.05em;text-transform:uppercase">{{w.group}}</span>
+          <sc-for list="{{w.lines}}" as="line" hint-placeholder-count="3">
+            <span style="font-size:16px;line-height:1.45">{{line}}</span>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;concept&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;crescent&quot;,&quot;laptop&quot;,&quot;eye&quot;],&quot;default&quot;:&quot;laptop&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;red&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;options&quot;:[&quot;#E5372E&quot;,&quot;#FF453A&quot;,&quot;#D9302A&quot;,&quot;#F0503C&quot;],&quot;default&quot;:&quot;#E5372E&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;hideSystemEntries&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const h = React.createElement;
+
+function glyph(c, s, col, size, red) {
+  const C = s === 'lid' ? red : col;
+  const st = { fill: 'none', stroke: C, strokeWidth: 1.4, strokeLinecap: 'round', strokeLinejoin: 'round' };
+  const f = { fill: C };
+  let k = [];
+  if (c === 'crescent') {
+    const p = 'M15.2 11.4A6.6 6.6 0 1 1 6.6 2.8a6.2 6.2 0 0 0 8.6 8.6z';
+    if (s === 'off') k = [h('path', { key: 1, d: p, ...st })];
+    else if (s === 'keep') k = [h('path', { key: 1, d: p, ...f })];
+    else k = [h('path', { key: 1, d: p, ...f }), h('circle', { key: 2, cx: 14.6, cy: 3.6, r: 1.9, ...f })];
+  } else if (c === 'laptop') {
+    const base = h('rect', { key: 'b', x: 1, y: 13.3, width: 16, height: 1.7, rx: 0.85, ...f });
+    if (s === 'off') k = [h('rect', { key: 1, x: 3, y: 3.5, width: 12, height: 8.3, rx: 1.3, ...st }), base];
+    else if (s === 'keep') k = [h('rect', { key: 1, x: 2.3, y: 2.8, width: 13.4, height: 9.7, rx: 1.6, ...f }), base];
+    else k = [
+      h('rect', { key: 1, x: 1.5, y: 9.4, width: 15, height: 3.4, rx: 1.2, ...f }), base,
+      h('path', { key: 2, d: 'M5 7.2 4.1 5.4M9 6.6V4.6M13 7.2l.9-1.8', ...st })
+    ];
+  } else {
+    const almond = 'M1.6 9C3.6 5.4 6.2 3.8 9 3.8s5.4 1.6 7.4 5.2c-2 3.6-4.6 5.2-7.4 5.2S3.6 12.6 1.6 9z';
+    if (s === 'off') k = [h('path', { key: 1, d: 'M2 7.6c2 3 4.4 4.4 7 4.4s5-1.4 7-4.4M4.6 10.4l-1 1.8M9 12v2.1M13.4 10.4l1 1.8', ...st })];
+    else if (s === 'keep') k = [h('path', { key: 1, d: almond, ...st }), h('circle', { key: 2, cx: 9, cy: 9, r: 2.5, ...f })];
+    else k = [h('path', { key: 1, d: almond + 'M9 6.4a2.6 2.6 0 1 0 0 5.2a2.6 2.6 0 1 0 0-5.2z', fillRule: 'evenodd', ...f })];
+  }
+  return h('svg', { width: size, height: size, viewBox: '0 0 18 18', style: { display: 'block' } }, k);
+}
+const check = (col) => h('svg', { width: 12, height: 12, viewBox: '0 0 12 12' }, h('path', { d: 'M2.5 6.4l2.5 2.5 4.6-5.6', fill: 'none', stroke: col, strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round' }));
+const chev = (col) => h('svg', { width: 10, height: 12, viewBox: '0 0 10 12' }, h('path', { d: 'M3.5 2.5 7 6l-3.5 3.5', fill: 'none', stroke: col, strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round' }));
+const sym = (type, col) => h('svg', { width: 15, height: 15, viewBox: '0 0 16 16' },
+  type === 'display'
+    ? [h('rect', { key: 1, x: 1.8, y: 2.5, width: 12.4, height: 8.6, rx: 1.3, fill: 'none', stroke: col, strokeWidth: 1.3 }), h('path', { key: 2, d: 'M5.5 13.6h5M8 11.2v2.4', stroke: col, strokeWidth: 1.3, strokeLinecap: 'round' })]
+    : [h('path', { key: 1, d: 'M13.4 10.2A5.8 5.8 0 1 1 5.8 2.6a5.4 5.4 0 0 0 7.6 7.6z', fill: 'none', stroke: col, strokeWidth: 1.3, strokeLinejoin: 'round' })]);
+
+const THEMES = {
+  light: { wall: '#D5D9DF', bar: 'rgba(255,255,255,0.55)', fg: '#1D1D1F', menuBg: 'rgba(244,244,246,0.94)', text: 'rgba(0,0,0,0.88)', grey: 'rgba(0,0,0,0.48)', sep: 'rgba(0,0,0,0.1)', border: 'rgba(0,0,0,0.14)', iconHi: 'rgba(0,0,0,0.1)' },
+  dark: { wall: '#26282D', bar: 'rgba(0,0,0,0.38)', fg: '#F5F5F7', menuBg: 'rgba(42,42,45,0.94)', text: 'rgba(255,255,255,0.9)', grey: 'rgba(255,255,255,0.48)', sep: 'rgba(255,255,255,0.12)', border: 'rgba(255,255,255,0.16)', iconHi: 'rgba(255,255,255,0.18)' }
+};
+const SEL = '#2F6FDE';
+const STATUS = { off: 'Sleeping normally', keep: 'Keeping awake, screen on', lid: "Lid Closed Mode on: Mac won't sleep" };
+const ASSERTIONS = [
+  { p: 'caffeinate', what: 'Display sleep', dur: '29 h 28 min', type: 'display' },
+  { p: 'powerd', what: 'System sleep while display is on', dur: '5 h 32 min', type: 'system' },
+  { p: 'Claude', what: 'Idle system sleep', dur: '3 h 33 min', type: 'system' },
+  { p: 'WindowServer', what: 'User is active', dur: 'a few seconds', type: 'system', noisy: true }
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    const concept = this.props.concept ?? 'laptop';
+    const red = this.props.red ?? '#E5372E';
+    const hide = this.props.hideSystemEntries ?? true;
+    const names = { crescent: 'Crescent', laptop: 'Lid', eye: 'Eye' };
+    const notes = {
+      crescent: 'Outline moon for normal sleep, filled moon while awake. Lid closed adds a dot beside the moon and turns red.',
+      laptop: 'Open laptop outline for normal sleep, lit (filled) screen while awake. Lid closed shows the shut laptop with activity marks, in red.',
+      eye: 'Closed eye for normal sleep, open eye while awake. Lid closed is a solid red eye that stays open.'
+    };
+    const bars = [
+      { label: 'Light bar', bg: '#ECECEE', fg: '#1D1D1F' },
+      { label: 'Dark bar', bg: '#1E1E20', fg: '#F5F5F7' },
+      { label: 'Cool wallpaper', bg: 'linear-gradient(90deg,#2F5FD0,#7A3FC4)', fg: '#FFFFFF' },
+      { label: 'Warm wallpaper', bg: 'linear-gradient(90deg,#F2B33D,#E9734A)', fg: '#1D1D1F' }
+    ];
+    const states = ['off', 'keep', 'lid'];
+    const concepts = ['crescent', 'laptop', 'eye'].map((c, i) => ({
+      id: '1' + 'abc'[i], name: names[c], note: notes[c],
+      big: states.map(s => ({ label: { off: 'Off', keep: 'Keep awake', lid: 'Lid closed' }[s], el: glyph(c, s, '#1D1D1F', 56, red) })),
+      bars: bars.map(b => ({ label: b.label, bg: b.bg, cells: states.map(s => glyph(c, s, b.fg, 16, red)) }))
+    }));
+
+    const build = (key, themeName) => {
+      const t = THEMES[themeName];
+      const ka = ['keep', 'both', 'sub', 'subEmpty'].includes(key);
+      const lc = ['lid', 'both'].includes(key);
+      const setup = key === 'setup';
+      const sub = key === 'sub' || key === 'subEmpty';
+      const row = (o) => {
+        const hi = !!o.hi;
+        const col = hi ? '#FFFFFF' : o.disabled ? t.grey : t.text;
+        return {
+          isRow: true, isSep: false, label: o.label, sub: o.sub || null,
+          pad: o.sub ? '4px 0' : '0', bg: hi ? SEL : 'transparent', color: col,
+          subColor: hi ? 'rgba(255,255,255,0.8)' : t.grey,
+          check: o.checked ? check(col) : null, chev: o.chev ? chev(col) : null, shortcut: o.shortcut || '',
+          hgt: o.sub ? 38 : 22
+        };
+      };
+      const sep = { isSep: true, isRow: false, hgt: 11 };
+      const rows = [
+        row({ label: lc ? STATUS.lid : ka ? STATUS.keep : STATUS.off, disabled: true }), sep,
+        row({ label: 'Keep Awake', checked: ka }),
+        row({ label: 'Lid Closed Mode', checked: lc, disabled: setup, sub: setup ? 'Setup needed: run setup.sh once' : null }),
+        sep,
+        row({ label: 'Turn Screen Off Now', sub: !ka && !lc ? 'Mac may sleep' : null }),
+        row({ label: "What's Keeping It Awake", chev: true, hi: sub }),
+        sep,
+        row({ label: 'Quit Sleep Manager', shortcut: '⌘Q' })
+      ];
+      const menuH = 10 + rows.reduce((a, r) => a + r.hgt, 0);
+      let subRows = [], subTop = 0, subH = 0;
+      if (sub) {
+        subTop = 27 + rows.slice(0, 6).reduce((a, r) => a + r.hgt, 0);
+        const list = key === 'subEmpty' ? [] : ASSERTIONS.filter(a => !(hide && a.noisy));
+        subRows = list.length
+          ? list.map(a => ({ label: a.p, sub: a.what + ' · ' + a.dur, pad: '4px 0', color: t.text, subColor: t.grey, sym: sym(a.type, t.text) }))
+          : [{ label: 'Nothing is keeping it awake', sub: null, pad: '0', color: t.grey, subColor: t.grey, sym: null }];
+        subH = 10 + subRows.reduce((a, r) => a + (r.sub ? 38 : 22), 0);
+      }
+      const iconState = lc ? 'lid' : ka ? 'keep' : 'off';
+      return {
+        key: key + '-' + themeName, t, themeLabel: themeName, rows, subRows, hasSub: sub, subTop,
+        icon: glyph(concept, iconState, t.fg, 16, red),
+        w: sub ? 640 : 360,
+        h: Math.max(27 + menuH, subTop + subH) + 48
+      };
+    };
+    const G = [
+      ['off', 'Neither mode on', 'Grey status row. Turn Screen Off Now carries a subtitle because the Mac can sleep after the screen goes dark.'],
+      ['keep', 'Keep Awake on', 'Monochrome active icon. Status row confirms the screen stays on.'],
+      ['lid', 'Lid Closed Mode on', 'Red icon. Status row states the consequence plainly.'],
+      ['both', 'Both on', 'Lid closed wins: red icon and its status row. Both rows are checked.'],
+      ['setup', 'Setup needed', 'Lid Closed Mode is disabled and its subtitle says how to fix it. No extra row needed.'],
+      ['sub', "What's Keeping It Awake", (hide ? 'WindowServer "user is active" is hidden. ' : '') + 'Process name as the title; what it prevents and for how long as a grey subtitle. Sorted by duration, longest first. Symbols stand in for SF Symbols "display" and "moon".'],
+      ['subEmpty', "What's Keeping It Awake, empty", 'A single disabled row.']
+    ];
+    const groups = G.map(([k, title, note]) => ({ title, note, mocks: [build(k, 'light'), build(k, 'dark')] }));
+
+    const wording = [
+      { group: 'Status row (disabled)', lines: ['Sleeping normally', 'Keeping awake, screen on', "Lid Closed Mode on: Mac won't sleep  (lid closed, or both)"] },
+      { group: 'Modes', lines: ['Keep Awake  (checkmark when on)', 'Lid Closed Mode  (checkmark when on)', 'Subtitle when setup is missing: Setup needed: run setup.sh once'] },
+      { group: 'Actions', lines: ['Turn Screen Off Now', 'Subtitle when neither mode is on: Mac may sleep', "What's Keeping It Awake  ▸", 'Quit Sleep Manager  ⌘Q'] },
+      { group: 'Submenu rows', lines: ['Title: process name (caffeinate)', 'Subtitle: what it prevents · duration (Display sleep · 29 h 28 min)', 'Empty: Nothing is keeping it awake'] },
+      { group: 'Lid closed red', lines: [red] }
+    ];
+    return { concepts, groups, wording, conceptName: names[concept], red };
+  }
+}
+</script>
+</body>
+</html>
