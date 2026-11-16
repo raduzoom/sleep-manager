@@ -1,7 +1,9 @@
 #!/bin/zsh
-# One-time setup: lets your user run exactly these two commands without a password,
-#   /usr/bin/pmset -a disablesleep 0
-#   /usr/bin/pmset -a disablesleep 1
+# One-time setup: lets your user run exactly these commands without a password,
+#   /usr/bin/pmset -a disablesleep 0                              (Lid Closed Mode off)
+#   /usr/bin/pmset -a disablesleep 1                              (Lid Closed Mode on)
+#   /usr/bin/pmset -b powernap 0 tcpkeepalive 0 womp 0            (Real Sleep on Battery on)
+#   /usr/bin/pmset -b powernap 1 tcpkeepalive 1 womp 0            (Real Sleep on Battery off: Apple's defaults)
 # Usage: sudo scripts/setup.sh [install|uninstall]
 set -euo pipefail
 
@@ -32,7 +34,7 @@ install)
     trap 'rm -f "$tmp"' EXIT
     cat > "$tmp" <<RULE
 # Installed by Sleep Manager. Remove with: sudo scripts/setup.sh uninstall
-$user ALL=(root) NOPASSWD: /usr/bin/pmset -a disablesleep 0, /usr/bin/pmset -a disablesleep 1
+$user ALL=(root) NOPASSWD: /usr/bin/pmset -a disablesleep 0, /usr/bin/pmset -a disablesleep 1, /usr/bin/pmset -b powernap 0 tcpkeepalive 0 womp 0, /usr/bin/pmset -b powernap 1 tcpkeepalive 1 womp 0
 RULE
     visudo -cf "$tmp"
     install -m 0440 -o root -g wheel "$tmp" "$rule_file"

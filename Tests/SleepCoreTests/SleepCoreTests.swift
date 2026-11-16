@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import SleepCore
 
@@ -46,4 +47,52 @@ Kernel Assertions: 0x104=USB,MAGICWAKE
     #expect(PowerSettings.sleepDisabled(fromPmsetOutput: "System-wide power settings:\n SleepDisabled\t\t1\n") == true)
     #expect(PowerSettings.sleepDisabled(fromPmsetOutput: " SleepDisabled\t\t0\nCurrently in use:\n") == false)
     #expect(PowerSettings.sleepDisabled(fromPmsetOutput: "Currently in use:\n sleep 1\n") == nil)
+}
+
+// `pmset -g custom` captured on 2026-11-07, trimmed.
+private let customSample = """
+Battery Power:
+ Sleep On Power Button 1
+ powernap             1
+ womp                 0
+ sleep                1
+ tcpkeepalive         1
+AC Power:
+ Sleep On Power Button 1
+ powernap             1
+ womp                 1
+ tcpkeepalive         1
+ disksleep            10
+"""
+
+@Test func readsBatteryAndACSettings() {
+    let settings = PowerSettings.networkWake(fromPmsetCustomOutput: customSample)
+    #expect(settings[.battery] == NetworkWakeSettings(powernap: true, tcpkeepalive: true, womp: false))
+    #expect(settings[.ac] == NetworkWakeSettings(powernap: true, tcpkeepalive: true, womp: true))
+    #expect(settings[.battery]?.realSleep == .off)
+}
+
+@Test func realSleepOnWhenAllOff() {
+    #expect(NetworkWakeSettings(powernap: false, tcpkeepalive: false, womp: false).realSleep == .on)
+}
+
+@Test func partialWhenSettingsDisagree() {
+    #expect(NetworkWakeSettings(powernap: false, tcpkeepalive: true, womp: false).realSleep == .partial)
+    #expect(NetworkWakeSettings(powernap: false, tcpkeepalive: false, womp: true).realSleep == .partial)
+}
+
+@Test func noBatterySection() {
+    let settings = PowerSettings.networkWake(fromPmsetCustomOutput: "AC Power:\n powernap 1\n womp 1\n tcpkeepalive 1\n")
+    #expect(settings[.battery] == nil)
+    #expect(settings[.ac] != nil)
+}
+
+// sudoers only allows the exact argument lists in the rule, so the app's must match setup.sh word for word.
+@Test func realSleepCommandsMatchSudoersRule() throws {
+    let setup = URL(filePath: #filePath).deletingLastPathComponent().appending(path: "../../scripts/setup.sh")
+    let rule = try #require(try String(contentsOf: setup, encoding: .utf8)
+        .split(separator: "\n").first { $0.contains("NOPASSWD:") })
+    for arguments in [SleepControl.realSleepOnArguments, SleepControl.realSleepOffArguments] {
+        #expect(rule.contains(([SleepControl.pmset] + arguments).joined(separator: " ")))
+    }
 }

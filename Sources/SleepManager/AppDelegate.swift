@@ -11,6 +11,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     // Last known state. Lid closed is always re-read from pmset, never assumed.
     private var lidClosedOn = false
     private var setupDone = false
+    /// Nil on a Mac without a battery, where the menu item is hidden.
+    private var realSleep: RealSleepState?
+    private var realSleepSetupDone = false
+    /// Read in the background at launch and after each wake, because `pmset -g log` takes seconds.
+    private var lastSleep: SleepSummary?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         menu.delegate = self
@@ -23,13 +28,33 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         refreshTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
             MainActor.assumeIsolated { self.refreshState() }
         }
+
+        loadLastSleep(after: .zero)
+        NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.didWakeNotification, object: nil,
+                                                          queue: .main) { _ in
+            // The cached line now describes the sleep before this one, so hide it until the log is read again.
+            // Give powerd a moment to write the Wake line first.
+            MainActor.assumeIsolated {
+                self.lastSleep = nil
+                self.loadLastSleep(after: .seconds(10))
+            }
+        }
+    }
+
+    private func loadLastSleep(after delay: Duration) {
+        Task {
+            try? await Task.sleep(for: delay)
+            lastSleep = await Task.detached { SleepControl.lastSleepSummary() }.value
+        }
     }
 
     // MARK: State and icon
 
     private func refreshState() {
         lidClosedOn = SleepControl.lidClosedModeIsOn() ?? lidClosedOn
-        setupDone = SleepControl.setupIsDone()
+        setupDone = SleepControl.lidClosedSetupIsDone()
+        realSleep = SleepControl.batteryNetworkWake()?.realSleep
+        realSleepSetupDone = SleepControl.realSleepSetupIsDone()
         updateIcon()
     }
 
@@ -82,6 +107,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             lidItem.subtitle = "Setup needed: run setup.sh once"
         }
         menu.addItem(lidItem)
+
+        if let realSleep {
+            let realSleepItem = actionItem("Real Sleep on Battery", #selector(toggleRealSleep))
+            realSleepItem.state = switch realSleep {
+            case .on: .on
+            case .off: .off
+            case .partial: .mixed
+            }
+            realSleepItem.isEnabled = realSleepSetupDone
+            if !realSleepSetupDone {
+                realSleepItem.subtitle = setupDone ? "Setup needed: run setup.sh again" : "Setup needed: run setup.sh once"
+            } else if realSleep == .on {
+                realSleepItem.subtitle = "Find My can't locate it while asleep"
+            }
+            menu.addItem(realSleepItem)
+        }
+        if let lastSleep {
+            menu.addItem(disabledItem(WakeLog.describe(lastSleep)))
+        }
 
         menu.addItem(.separator())
 
@@ -155,6 +199,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let result = SleepControl.setLidClosedMode(!lidClosedOn)
         if !result.succeeded {
             showError("Couldn't change lid closed mode", result.output)
+        }
+        refreshState()
+    }
+
+    /// A mixed state (settings changed elsewhere) switches fully on.
+    @objc private func toggleRealSleep() {
+        let result = SleepControl.setRealSleep(realSleep != .on)
+        if !result.succeeded {
+            showError("Couldn't change Real Sleep on Battery", result.output)
         }
         refreshState()
     }
