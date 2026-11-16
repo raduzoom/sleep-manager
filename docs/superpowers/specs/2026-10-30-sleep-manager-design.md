@@ -39,7 +39,7 @@ is on, so the user notices it.
 
 - The icon shows "off" while `SleepDisabled` is really `1`. That is the exact problem this app exists to prevent.
 - A password prompt on every toggle.
-- Passwordless root for anything beyond the two exact `pmset disablesleep` commands.
+- Passwordless root for anything beyond the exact `pmset` commands listed in `scripts/setup.sh`.
 - A busy or settings-heavy interface.
 
 ## Decisions made with the user
@@ -55,6 +55,9 @@ is on, so the user notices it.
 | Claude Design output | The full visual design: icon in all states, the dropdown menu, the assertions view |
 | Icon concept | 1b Lid from the Claude Design handoff (open laptop / filled screen / red `#E5372E` closed laptop); SVGs in `Resources/` |
 | Dropdown style | Standard macOS menu (like Wi-Fi/Bluetooth): checkmarks for the two modes, assertions list in a submenu |
+| Real Sleep (added 2026-11-07, `plans/real-sleep.md`) | Toggle "Real Sleep on Battery": `pmset -b powernap 0 tcpkeepalive 0 womp 0`, off restores Apple's battery defaults `powernap 1 tcpkeepalive 1 womp 0`. Battery only, so Find My and network wake still work on mains |
+| Last sleep line | Grey "Last sleep (length): woke N times (reason) · A% → B%" from `pmset -g log`, read at launch and after each wake |
+| Icon for Real Sleep | Unchanged; red stays reserved for Lid closed |
 
 ## Calls made by Claude (check these)
 
